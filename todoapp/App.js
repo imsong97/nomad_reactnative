@@ -52,11 +52,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: width - 25,
     borderRadius: 10, //모서리둥글게
+    
+   ...Platform.select({ //플랫폼 선택
     /*
     shaodw 사용
     ios -> shadow ~ ,    android -> elevation
     */
-   ...Platform.select({ //플랫폼 선택
     ios: {
       shadowColor: "rgb(50, 50, 50)",
       shadowOpacity: 0.5,

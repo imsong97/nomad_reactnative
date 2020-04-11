@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+import {View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput } from "react-native";
 
 const {width, height} = Dimensions.get("window");
 
 export default class ToDo extends React.Component{
     state = {
         isEditing: false,
-        isCompleted: false
+        isCompleted: false,
+        todoValue: ""
     };
 
     render(){
-        const {isCompleted, isEditing} = this.state;
+        const {isCompleted, isEditing, todoValue} = this.state;
+        const {text} = this.props;
 
         return(
             <View style={styles.container}>
@@ -18,7 +20,15 @@ export default class ToDo extends React.Component{
                     <TouchableOpacity onPress={this.toggleComplete}>
                         <View style={[styles.circle, isCompleted ? styles.completedCircle : styles.uncompletedCircle]}/>
                     </TouchableOpacity>
-                    <Text style={[styles.text, isCompleted ? styles.isCompletedText : styles.uncompletedText]}>Hello Todo</Text>
+                    {isEditing ? (
+                        <TextInput style={[styles.text, isCompleted ? styles.isCompletedText : styles.uncompletedText]} 
+                            value={todoValue} multiline={true} onChangeText={this.controllInput} returnKeyType={"done"}
+                            onBlur={this.finishEditing}/>
+                    ) : (
+                        <Text style={[styles.text, isCompleted ? styles.isCompletedText : styles.uncompletedText]}>
+                            {text}
+                        </Text>)
+                    }
                 </View>
                 {isEditing ? (
                 <View style={styles.action}>
@@ -48,22 +58,21 @@ export default class ToDo extends React.Component{
 
     toggleComplete=()=>{
         this.setState(prevState=>{
-            return{
-                isCompleted: !prevState.isCompleted
-            }
+            return {isCompleted: !prevState.isCompleted}
         });
     };
 
     startEditing=()=>{
-        this.setState({
-            isEditing: true
-        });
+        const {text} = this.props;
+        this.setState({isEditing: true, todoValue: text});
     };
 
     finishEditing=()=>{
-        this.setState({
-            isEditing: false
-        });
+        this.setState({isEditing: false});
+    };
+
+    controllInput=(text)=>{
+        this.setState({todoValue: text});
     };
 }
 
@@ -112,5 +121,9 @@ const styles = StyleSheet.create({
     actionContainer:{
         marginVertical: 10,
         marginHorizontal: 10
+    },
+    input:{
+        marginVertical: 20,
+        width: width / 2
     }
 });

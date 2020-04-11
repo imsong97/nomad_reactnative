@@ -20,7 +20,7 @@ export default class App extends React.Component {
           <TextInput style={styles.input} placeholder="New To Do" 
             value={newToDo} onChangeText={this.controlNewToDo} returnKeyType="done"/>
           <ScrollView contentContainerStyle={styles.todos}>
-            <ToDo />
+            <ToDo text={"Hello ToDo"}/>
           </ScrollView>
         </View>
       </View>

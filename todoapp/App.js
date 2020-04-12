@@ -1,17 +1,27 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform, ScrollView } from 'react-native';
 import { render } from 'react-dom';
+import {AppLoading} from "expo";
 import ToDo from "./Todo"
 
 const { height, width} = Dimensions.get("window");
 
 export default class App extends React.Component {
   state = {
-    newToDo: ""
+    newToDo: "",
+    loadedToDo: false
   };
 
+  componentDidMount=()=>{
+    this.loadToDo();
+  }
+
   render() {
-    const {newToDo} = this.state;
+    const {newToDo, loadedToDo} = this.state;
+    if(!loadedToDo){
+      return <AppLoading />;
+    }
+      
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content"/>
@@ -31,7 +41,11 @@ export default class App extends React.Component {
     this.setState({
       newToDo: text
     });
-  }
+  };
+
+  loadToDo = ()=>{
+    
+  };
 }
 
 const styles = StyleSheet.create({

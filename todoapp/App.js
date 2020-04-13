@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform, ScrollView } from 'react-native';
 import { render } from 'react-dom';
 import {AppLoading} from "expo";
-import ToDo from "./Todo"
+import ToDo from "./Todo";
+import uuidv1 from "uuid/v1";
 
 const { height, width} = Dimensions.get("window");
 
@@ -28,7 +29,7 @@ export default class App extends React.Component {
         <Text style={styles.title}>To Do List</Text>
         <View style={styles.card}>
           <TextInput style={styles.input} placeholder="New To Do" 
-            value={newToDo} onChangeText={this.controlNewToDo} returnKeyType="done"/>
+            value={newToDo} onChangeText={this.controlNewToDo} returnKeyType="done" autoCorrect={false} onSubmitEditing={this.addToDo}/>
           <ScrollView contentContainerStyle={styles.todos}>
             <ToDo text={"Hello ToDo"}/>
           </ScrollView>
@@ -38,13 +39,25 @@ export default class App extends React.Component {
   }
 
   controlNewToDo = text => {
-    this.setState({
-      newToDo: text
-    });
+    this.setState({newToDo: text});
   };
 
   loadToDo = ()=>{
-    
+    this.setState({loadToDo: true});
+  };
+
+  addToDo = () =>{
+    const {newToDo} = this.state;
+    if(newToDo !== ""){
+      this.setState({newToDo: ""});
+      this.setState(prevState => {
+        const ID = uuidv1();
+        const newToDoObject = {
+          [ID]:{id: ID, isCompleted: false, text: newToDo, createdAt: Date.now()}
+        }
+      });
+    }
+      
   };
 }
 
